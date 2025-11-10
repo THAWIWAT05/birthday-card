@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สุขสันต์วันเกิด</title>
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #f5c0c0, #c0d4f5);
+    margin: 0;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+.card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 30px;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: cardOpen 1s forwards;
+}
+@keyframes cardOpen {
+    to { opacity: 1; transform: scale(1); }
+}
+.cake-icon {
+    background: #f7c0d0;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    position: relative;
+    z-index: 2;
+}
+h1 { color: #4aa0f0; margin: 15px 0 5px 0; }
+h2 { color: #f080a0; margin: 0 0 15px 0; font-weight: normal; }
+.music { margin: 15px 0; }
+.message {
+    font-size: 14px;
+    color: #333;
+    margin-top: 20px;
+    text-align: left;
+    padding-top: 15px;
+    border-top: 1px dashed #ccc;
+    min-height: 80px;
+}
+
+/* Horizontal slider */
+.slider { position: relative; width: 100%; overflow: hidden; border-radius: 15px; margin: 15px 0; }
+.slides { display: flex; transition: transform 0.5s ease; }
+.slides img { width: 100%; border-radius: 15px; flex-shrink: 0; }
+.navigation-manual { position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: center; z-index: 2; }
+.manual-btn { border: 2px solid #4aa0f0; padding: 5px; border-radius: 50%; cursor: pointer; transition: 0.3s; margin: 0 5px; background: white; }
+.manual-btn:hover { background: #4aa0f0; }
+.prev, .next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.2); border: none; color: white; font-size: 20px; padding: 5px 10px; border-radius: 50%; cursor: pointer; z-index: 2; }
+.prev { left: 10px; } .next { right: 10px; } .prev:hover, .next:hover { background: rgba(0,0,0,0.4); }
+
+/* หัวใจลอย */
+.heart { position: absolute; color: #f080a0; font-size: 20px; animation: float 2s linear forwards; pointer-events: none; z-index: 1; }
+@keyframes float { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-150px) scale(1.5); opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="card" onclick="createHeart(event)">
+    <div class="cake-icon">🎂</div>
+    <h1>สุขสันต์วันเกิด</h1>
+    <h2>หวานหวาน 🎉</h2>
+
+    <div class="music">
+        <p>ฟังเพลงก่อนนะ 🎶</p>
+        <audio controls>
+            <source src="song.mp3" type="audio/mpeg">
+            เบราว์เซอร์ของคุณไม่รองรับเพลง
+        </audio>
+    </div>
+
+    <div class="slider">
+        <div class="slides" id="slides">
+            <img src="image1.png" alt="รูป1">
+            <img src="image2.png" alt="รูป2">
+            <img src="image3.png" alt="รูป3">
+        </div>
+        <div class="navigation-manual">
+            <div class="manual-btn" onclick="currentSlide(0)"></div>
+            <div class="manual-btn" onclick="currentSlide(1)"></div>
+            <div class="manual-btn" onclick="currentSlide(2)"></div>
+        </div>
+        <button class="prev" onclick="prevSlide()">◀</button>
+        <button class="next" onclick="nextSlide()">▶</button>
+    </div>
+
+    <div class="message" id="message"></div>
+</div>
+
+<script>
+// สไลด์
+let slideIndex = 0;
+const slidesContainer = document.getElementById('slides');
+const slides = slidesContainer.children;
+const totalSlides = slides.length;
+
+function showSlide(index){
+    slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+    slideIndex = index;
+}
+function currentSlide(index){ showSlide(index); }
+function nextSlide(){ slideIndex = (slideIndex + 1) % totalSlides; showSlide(slideIndex); }
+function prevSlide(){ slideIndex = (slideIndex - 1 + totalSlides) % totalSlides; showSlide(slideIndex); }
+
+// ข้อความทีละตัว
+const fullMessage = "ป๊าอายุ 21 ปีแล้ว ขอให้วันเกิดปีนี้ดีที่สุดสำหรับความสุข ความสำเร็จ และสิ่งดีๆ ที่จะเกิดขึ้นทุกวัน ขอให้สุขภาพแข็งแรงและก้าวไปสู่ความฝันที่มุ่งมั่นไว้ ทุกสิ่งที่ตั้งใจจะประสบความสำเร็จเสมอ รักเองมากๆ นะ ❤️ 🎉";
+const messageContainer = document.getElementById('message');
+let charIndex = 0;
+function typeMessage() {
+    if(charIndex < fullMessage.length){
+        messageContainer.innerHTML += fullMessage.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeMessage, 50);
+    }
+}
+typeMessage();
+
+// หัวใจลอย
+function createHeart(e){
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = e.clientX - 10 + 'px';
+    heart.style.top = e.clientY - 10 + 'px';
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(), 2000);
+}
+</script>
+</body>
+</html>
